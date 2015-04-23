@@ -1,0 +1,1 @@
+This is personal project to practice deep learning codes from DeepLearningPractice [Link](http://deeplearning.net/tutorial/)
