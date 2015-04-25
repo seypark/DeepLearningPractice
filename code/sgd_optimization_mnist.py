@@ -1,4 +1,5 @@
-
+# This code is from the web tutorial
+# http://deeplearning.net/tutorial/logreg.html
 import cPickle
 import theano
 import theano.tensor as T
@@ -59,6 +60,7 @@ class LogisticRegression(object):
         # the mean (across minibatch examples) of the elements in v
         return -T.mean(T.log(self.p_y_given_x)[T.arange(y.shape[0]), y])
     def errors(self, y):
+        print 'error call'
         """Return a float representing the number of errors in the minibatch
         over the total number of examples of the minibatch ; zero one
         loss over the size of the minibatch
@@ -67,7 +69,7 @@ class LogisticRegression(object):
         :param y: corresponds to a vector that gives for each example the
                   correct label
         """
-
+        print self.y_pred.ndim
         # check if y has same dimension of y_pred
         if y.ndim != self.y_pred.ndim:
             raise TypeError(
@@ -125,7 +127,7 @@ def load_data(dataset):
     rval = [(train_set_x, train_set_y), (valid_set_x, valid_set_y), (test_set_x, test_set_y)]
     return rval
 
-def train(dataset='mnist.pkl.gz', batch_size=600, learning_rate=0.13, n_epochs=1000):
+def sgd_optimization_mnist(dataset='mnist.pkl.gz', batch_size=600, learning_rate=0.13, n_epochs=1000):
     datasets = load_data(dataset)
     train_set_x, train_set_y = datasets[0]
     valid_set_x, valid_set_y = datasets[1]
@@ -226,19 +228,19 @@ def train(dataset='mnist.pkl.gz', batch_size=600, learning_rate=0.13, n_epochs=1
     while (epoch < n_epochs) and (not done_looping):
         epoch = epoch + 1
         for minibatch_index in xrange(n_train_batches):
-
             minibatch_avg_cost = train_model(minibatch_index)
             # iteration number
             iter = (epoch - 1) * n_train_batches + minibatch_index
 
-            #iter is 0,... ,10 for epoch = 1
-            #iter is 11,... ,20 for epoch = 2
+            #iter is 0,... ,83 for epoch = 1
+            #iter is 84,... ,166 for epoch = 2
 
 
             if (iter + 1) % validation_frequency == 0:
                 # compute zero-one loss on validation set
                 validation_losses = [validate_model(i)
                                      for i in xrange(n_valid_batches)]
+                print validate_model(i).y
                 this_validation_loss = numpy.mean(validation_losses)
 
                 print(
@@ -297,4 +299,4 @@ def train(dataset='mnist.pkl.gz', batch_size=600, learning_rate=0.13, n_epochs=1
                           ' ran for %.1fs' % ((end_time - start_time)))
 
 if __name__ == '__main__':
-	train()
+	sgd_optimization_mnist()
