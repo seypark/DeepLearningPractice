@@ -6,7 +6,7 @@ import theano.tensor as T
 import numpy
 import gzip
 import time
-
+import sys
 import os
 
 class LogisticRegression(object):
@@ -240,7 +240,6 @@ def sgd_optimization_mnist(dataset='mnist.pkl.gz', batch_size=600, learning_rate
                 # compute zero-one loss on validation set
                 validation_losses = [validate_model(i)
                                      for i in xrange(n_valid_batches)]
-                print validate_model(i).y
                 this_validation_loss = numpy.mean(validation_losses)
 
                 print(

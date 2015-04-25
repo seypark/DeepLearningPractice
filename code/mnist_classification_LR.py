@@ -62,7 +62,6 @@ class LR(object):
         # the mean (across minibatch examples) of the elements in v
         return -T.mean(T.log(self.p_y_given_x)[T.arange(y.shape[0]), y])
     def errors(self, y):
-        print 'error call'
         """Return a float representing the number of errors in the minibatch
         over the total number of examples of the minibatch ; zero one
         loss over the size of the minibatch
@@ -71,7 +70,6 @@ class LR(object):
         :param y: corresponds to a vector that gives for each example the
                   correct label
         """
-        print self.y_pred.ndim
         # check if y has same dimension of y_pred
         if y.ndim != self.y_pred.ndim:
             raise TypeError(
@@ -184,7 +182,10 @@ def mnist_classification(dataset='mnist.pkl.gz', batch_size = 600, learning_rate
 
     best_valid_loss = valid_set_x.get_value(borrow=True).shape[1]
     stop_train = False
+    min_iter = 200
+    iter = 0
     while (not stop_train):
+        iter = iter +1
         #train with training set
         for i in xrange(n_train_set):
             # do gradient descent with logistic regression
@@ -199,11 +200,12 @@ def mnist_classification(dataset='mnist.pkl.gz', batch_size = 600, learning_rate
                 valid_loss = valid_function()
 
                 print 'validation error %s %%' % (valid_loss)
-                print 
                 if valid_loss < best_valid_loss :
                     best_valid_loss = valid_loss
+                    stop_train = False
                 else:
-                    stop_train = True
+                    if(iter > min_iter):
+                        stop_train = True
 
     test_loss = test_function()
     print 'test error %s %%' % (test_loss)
